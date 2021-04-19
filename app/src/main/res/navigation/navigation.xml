@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_maps">
+
+    <fragment
+        android:id="@+id/navigation_maps"
+        android:name="com.petr.example.mapapp.ui.home.MapsFragment"
+        android:label="@string/title_maps"
+        tools:layout="@layout/fragment_maps" />
+
+    <fragment
+        android:id="@+id/navigation_dashboard"
+        android:name="com.petr.example.mapapp.ui.items.ItemsListFragment"
+        android:label="@string/title_dashboard"
+        tools:layout="@layout/fragment_items_list" >
+        <action
+            android:id="@+id/action_navigation_dashboard_to_navigation_detail"
+            app:destination="@id/navigation_detail" />
+        <action
+            android:id="@+id/action_navigation_dashboard_to_navigation_edit"
+            app:destination="@id/navigation_edit" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_notifications"
+        android:name="com.petr.example.mapapp.ui.notifications.NotificationsFragment"
+        android:label="@string/title_notifications"
+        tools:layout="@layout/fragment_notifications" />
+
+    <fragment
+        android:id="@+id/navigation_detail"
+        android:name="com.petr.example.mapapp.ui.detail.DetailFragment"
+        android:label="Detail"
+        tools:layout="@layout/fragment_detail">
+        <argument
+            android:name="itemId"
+            app:argType="long" />
+        <action
+            android:id="@+id/action_navigation_detail_to_navigation_edit"
+            app:destination="@id/navigation_edit" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_edit"
+        android:name="com.petr.example.mapapp.ui.edit.EditFragment"
+        android:label="Add/Edit"
+        tools:layout="@layout/fragment_edit" >
+        <argument
+            android:name="itemId"
+            app:argType="long"
+            android:defaultValue="-1L" />
+    </fragment>
+
+</navigation>
