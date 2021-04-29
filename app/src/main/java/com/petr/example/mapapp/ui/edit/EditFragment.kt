@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
+import com.petr.example.mapapp.data.Item
 import com.petr.example.mapapp.databinding.FragmentEditBinding
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -22,15 +24,33 @@ class EditFragment : Fragment() {
         EditViewModel.provideFactory(editViewModelFactory, args.itemId)
     }
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentEditBinding.inflate(inflater, container, false).apply {
             viewModel = editViewModel
             lifecycleOwner = viewLifecycleOwner
         }
-
-
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        var item: Item? = null
+        val editState = if (args.itemId > 0) EditState.EXISTING_ITEM else EditState.NEW_ITEM
+        if (editState == EditState.EXISTING_ITEM) {
+            editViewModel.getItem(args.itemId).observe(viewLifecycleOwner) {
+                item = it
+            }
+        }
+
+        binding.fabSave.setOnClickListener {
+            editViewModel.saveItem(
+                item?.itemId ?: 0,
+                binding.editText1.editText?.text.toString(),
+                binding.editText2.editText?.text.toString(),
+                binding.editText3.editText?.text.toString(),
+                binding.editRoll1.editText?.text.toString(),
+                binding.editRoll2.editText?.text.toString(),
+                imageUrl1 = "https://upload.wikimedia.org/wikipedia/commons/5/55/Apple_orchard_in_Tasmania.jpg"
+            )
+        }
+    }
 }

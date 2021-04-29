@@ -1,4 +1,4 @@
-package com.petr.example.mapapp.ui.items
+package com.petr.example.mapapp.ui.maplist
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.petr.example.mapapp.R
 import com.petr.example.mapapp.databinding.FragmentItemsListBinding
@@ -29,7 +29,7 @@ class ItemsListFragment : Fragment() {
 
     private fun subscribeUi(adapter: ItemsListAdapter, binding: FragmentItemsListBinding) {
         itemsViewModel.items.observe(viewLifecycleOwner) { result ->
-            binding.hasItem = !result.isNullOrEmpty()
+            binding.hasItems = !result.isNullOrEmpty()
             adapter.submitList(result)
         }
     }
@@ -41,8 +41,4 @@ class ItemsListFragment : Fragment() {
             findNavController().navigate(R.id.action_navigation_dashboard_to_navigation_edit)
         }
     }
-
-
-
-
 }

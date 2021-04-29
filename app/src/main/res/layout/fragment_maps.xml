@@ -5,90 +5,96 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.home.MapsFragment">
+        tools:context=".ui.map.MapsFragment">
 
-        <HorizontalScrollView
-            android:id="@+id/chips"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:elevation="4dp"
-            android:scrollbars="none"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
 
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/region_list"
+            <HorizontalScrollView
+                android:id="@+id/chips"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/spacing_normal"
-                app:singleLine="true">
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipRed"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/region_list"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Red Hot Chilli Peppers" />
+                    android:padding="@dimen/spacing_normal"
+                    app:singleLine="true">
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipGreen"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Green Day" />
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipRed"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Red Hot Chilli Peppers" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipBlue"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="The Offspring" />
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipGreen"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Green Day" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipBlueX"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Rancid" />
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipBlue"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="The Offspring" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipBX"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="The Interrupters" />
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipBlueX"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Rancid" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipXXX"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Others..." />
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipBX"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="The Interrupters" />
 
-            </com.google.android.material.chip.ChipGroup>
-        </HorizontalScrollView>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipXXX"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Others..." />
+                </com.google.android.material.chip.ChipGroup>
+            </HorizontalScrollView>
 
-        <fragment
-            android:id="@+id/map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            <fragment
+                android:id="@+id/map"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <include layout="@layout/fragment_items_list"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/floatingActionButton"
+            android:id="@+id/fab_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
+            android:layout_gravity="bottom|end"
             android:clickable="true"
             android:contentDescription="TODO"
-            android:src="@drawable/list_black_24"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:src="@drawable/fab_list_black_24" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

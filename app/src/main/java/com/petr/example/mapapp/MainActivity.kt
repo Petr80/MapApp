@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
 
         val binding: ActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        val toolbar: Toolbar = binding.toolbar
+       val toolbar: Toolbar = binding.toolbar
         setSupportActionBar(toolbar)
 
         val navView: BottomNavigationView = binding.navView

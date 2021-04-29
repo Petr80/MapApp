@@ -1,4 +1,4 @@
-package com.petr.example.mapapp.ui.items
+package com.petr.example.mapapp.ui.maplist
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,12 +8,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.petr.example.mapapp.data.Item
-import com.petr.example.mapapp.databinding.ListItemsBinding
+import com.petr.example.mapapp.databinding.ListItemsImageBinding
 
-class ItemsListAdapter : ListAdapter<Item, RecyclerView.ViewHolder>(ItemDiffCallback()) {
+class ImageListAdapter : ListAdapter<Item, RecyclerView.ViewHolder>(ImageDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return ItemViewHolder(ListItemsBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return ItemViewHolder(ListItemsImageBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -21,12 +21,12 @@ class ItemsListAdapter : ListAdapter<Item, RecyclerView.ViewHolder>(ItemDiffCall
         (holder as ItemViewHolder).bind(item)
     }
 
-    class ItemViewHolder(private val binding: ListItemsBinding) : RecyclerView.ViewHolder(binding.root) {
+    class ItemViewHolder(private val binding: ListItemsImageBinding) : RecyclerView.ViewHolder(binding.root) {
 
         init {
             binding.setClickListener { view ->
                 binding.item?.let { item ->
-                    navigateToDetail(item, view)
+/*                    navigateToDetail(item, view)*/
                 }
             }
         }
@@ -45,7 +45,7 @@ class ItemsListAdapter : ListAdapter<Item, RecyclerView.ViewHolder>(ItemDiffCall
     }
 }
 
-private class ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
+private class ImageDiffCallback : DiffUtil.ItemCallback<Item>() {
 
     override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
         return oldItem.itemId == newItem.itemId

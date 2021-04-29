@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.petr.example.mapapp.R
@@ -23,7 +24,7 @@ class DetailFragment : Fragment() {
     @Inject
     lateinit var detailViewModelFactory: DetailViewModel.AssistedFactory
     private val detailViewModel: DetailViewModel by viewModels {
-        DetailViewModel.provideFactory(detailViewModelFactory, itemId)
+        DetailViewModel.provideFactory(detailViewModelFactory, args.itemId)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -31,6 +32,10 @@ class DetailFragment : Fragment() {
 
             viewModel = detailViewModel
             lifecycleOwner = viewLifecycleOwner
+
+            toolbarDetail.setNavigationOnClickListener { view ->
+                view.findNavController().navigateUp()
+            }
 
             fabEditButton.setOnClickListener {
                 val action = DetailFragmentDirections.actionNavigationDetailToNavigationEdit(itemId)
@@ -41,5 +46,4 @@ class DetailFragment : Fragment() {
         setHasOptionsMenu(true)
         return binding.root
     }
-
 }

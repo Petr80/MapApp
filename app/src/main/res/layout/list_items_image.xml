@@ -7,8 +7,8 @@
     <data>
         <variable
             name="clickListener" type="android.view.View.OnClickListener"/>
-        <!--        <variable
-                    name="pet" type="com.example.XXX.data.XXX"/>-->
+                <variable
+                    name="item" type="com.petr.example.mapapp.data.Item"/>
     </data>
 
     <ImageView
@@ -19,7 +19,7 @@
         android:layout_margin="@dimen/image_space"
         android:contentDescription="ToDo"
         android:scaleType="centerCrop"
-
+        app:imageFromUrl="@{item.imageUrl1}"
         tools:srcCompat="@tools:sample/avatars"/>
 
 

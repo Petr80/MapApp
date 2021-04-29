@@ -1,9 +1,8 @@
-package com.petr.example.mapapp.ui.items
+package com.petr.example.mapapp.ui.maplist
 
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.petr.example.mapapp.data.Item

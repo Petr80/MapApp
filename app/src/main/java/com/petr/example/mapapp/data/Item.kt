@@ -8,13 +8,10 @@ import androidx.room.PrimaryKey
 data class Item(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id") var itemId: Long,
-    @ColumnInfo(name = "name") var name: String,
-    @ColumnInfo(name = "birth_date") var birthDate: String,
-    @ColumnInfo(name = "weight") var weight: String,
-    @ColumnInfo(name = "colour") var colour: String,
-    @ColumnInfo(name = "dist_marks") var distMarks: String = "",
-    @ColumnInfo(name = "street") var street: String = "",
-    @ColumnInfo(name = "street_nbr") var streetNbr: String = "",
-    @ColumnInfo(name = "town") var town: String = "",
-    @ColumnInfo(name = "state") var state: String = "",
+    @ColumnInfo(name = "et_1") var edit1: String,
+    @ColumnInfo(name = "et_2") var edit2: String,
+    @ColumnInfo(name = "et_3") var edit3: String,
+    @ColumnInfo(name = "roll_1") var roll1: String = "",
+    @ColumnInfo(name = "roll_2") var roll2: String = "",
+    @ColumnInfo(name = "image_url_1") var imageUrl1: String,
 )
