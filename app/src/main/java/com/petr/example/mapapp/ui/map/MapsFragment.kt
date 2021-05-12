@@ -1,16 +1,18 @@
 package com.petr.example.mapapp.ui.map
 
-import android.animation.Animator
-import android.location.Location
-import androidx.fragment.app.Fragment
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSnapHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -22,12 +24,12 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.petr.example.mapapp.MainActivity
 import com.petr.example.mapapp.R
-import com.petr.example.mapapp.databinding.BottomMapListBinding
 import com.petr.example.mapapp.databinding.FragmentMapsBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_maps.*
 import java.util.*
+
 
 @AndroidEntryPoint
 class MapsFragment : Fragment(), OnMapReadyCallback {
@@ -35,7 +37,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     private var permissionDenied = false
     private lateinit var mMap: GoogleMap
     private lateinit var binding: FragmentMapsBinding
-    private lateinit var bindingMapList: BottomMapListBinding
     private val mapViewModel: MapViewModel by viewModels()
 
     //#1 Defining a BottomSheetBehavior instance
@@ -45,10 +46,12 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     private var lat: Float = 0f
     private var lon: Float = 0f
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = FragmentMapsBinding.inflate(inflater, container, false)
-
-        bindingMapList = BottomMapListBinding.inflate(inflater, container, false)
 
         createBottomSheetListBehaviour()
         createBottomSheetItemBehavior()
@@ -59,24 +62,55 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         return binding.root
     }
 
-    private fun subscribeUi(adapter: MapListAdapter, bindingMapList: BottomMapListBinding) {
-        mapViewModel.items.observe(viewLifecycleOwner) { result ->
-            bindingMapList.hasItems = !result.isNullOrEmpty()
-            adapter.submitList(result)
-        }
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
 
-        val listAdapter = MapListAdapter()
-        bindingMapList.bottomMapRecycleList.adapter = listAdapter
-        subscribeUi(listAdapter, bindingMapList)
+        setupRecyclerView()
+        subscribeUi()
     }
 
-    private fun setupUI(){
+    private fun subscribeUi() {
+        mapViewModel.items.observe(viewLifecycleOwner) { result ->
+            binding.includedItemList.hasItems = !result.isNullOrEmpty()
+            (binding.includedItemList.bottomMapRecycleList.adapter as MapListAdapter).submitList(result)
+
+            // for cycle add markers
+
+        }
+    }
+    
+    private fun setupRecyclerView() {
+        val listAdapter = MapListAdapter()
+        binding.includedItemList.bottomMapRecycleList.adapter = listAdapter
+
+        val llm = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.includedItemList.bottomMapRecycleList.layoutManager = llm
+
+        val snapHelper = LinearSnapHelper()
+        snapHelper.attachToRecyclerView(binding.includedItemList.bottomMapRecycleList)
+        binding.includedItemList.bottomMapRecycleList.addOnScrollListener(object :
+            RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                val first = llm.findFirstVisibleItemPosition()
+                val second = llm.findLastVisibleItemPosition()
+
+                if (first != second)
+                    return super.onScrolled(recyclerView, dx, dy)
+
+
+                // hardcoded for now... todo: make dynamic
+                val vrane = LatLng(50.24107, 14.31149)
+                val zoomLevel = 15f
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(vrane, zoomLevel))
+
+                super.onScrolled(recyclerView, dx, dy)
+            }
+        })
+    }
+
+    private fun setupUI() {
         binding.fabList.setOnClickListener {
             bottomSheetBehaviorList.state =
                 if (bottomSheetBehaviorList.state == BottomSheetBehavior.STATE_EXPANDED)
@@ -84,43 +118,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                 else
                     BottomSheetBehavior.STATE_EXPANDED
         }
-    }
-
-    private fun createBottomSheetListBehaviour(){
-        bottomSheetBehaviorList = BottomSheetBehavior.from(binding.includedItemList.bottomMapList)
-        // bottomSheetBehaviorList.isFitToContents = false
-        // bottomSheetBehaviorList.halfExpandedRatio = 0.4f
-        bottomSheetBehaviorList.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
-            override fun onSlide(bottomSheet: View, slideOffset: Float) {
-            }
-
-            override fun onStateChanged(bottomSheet: View, newState: Int) {
-                when (newState) {
-                    BottomSheetBehavior.STATE_EXPANDED -> {
-                        binding.fabList.setImageResource(R.drawable.outline_close_black_24)
-                        // findNavController().navigate(R.id.action_navigation_maps_to_navigation_dashboard)
-                        Toast.makeText(requireContext(), "STATE_EXPANDED", Toast.LENGTH_SHORT).show()
-                    }
-                    BottomSheetBehavior.STATE_COLLAPSED -> {
-                        binding.fabList.setImageResource(R.drawable.fab_list_black_24)
-                        Toast.makeText(requireContext(), "STATE_COLLAPSED", Toast.LENGTH_SHORT).show()
-                    }
-                    BottomSheetBehavior.STATE_DRAGGING -> {
-                        Toast.makeText(requireContext(), "STATE_DRAGGING", Toast.LENGTH_SHORT).show()
-                    }
-                    BottomSheetBehavior.STATE_HALF_EXPANDED -> {
-                        Toast.makeText(requireContext(), "STATE_HALF_EXPANDED", Toast.LENGTH_SHORT).show()
-                    }
-/*                    BottomSheetBehavior.STATE_HIDDEN -> {
-                        binding.fabList.setImageResource(R.drawable.fab_list_black_24)
-                        Toast.makeText(requireContext(), "STATE_HIDDEN", Toast.LENGTH_SHORT).show()
-                    }*/
-                    BottomSheetBehavior.STATE_SETTLING -> {
-                        Toast.makeText(requireContext(), "STATE_SETTLING", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-        })
     }
 
     override fun onMapReady(googleMap: GoogleMap?) {
@@ -135,9 +132,21 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                 .title("Home sweet Home")
         )
         setMapLongClick(mMap)
+        setOnCameraMove(vrane)
+    }
+
+    private fun setOnCameraMove(vrane: LatLng){
+        mMap.setOnCameraMoveListener {
+            // iterate over all items
+
+            if (mMap.projection.visibleRegion.latLngBounds.contains(vrane)){
+                // show find others
+            }
+        }
     }
 
     private fun setMapLongClick(mMap: GoogleMap) {
+        mMap.cameraPosition
         mMap.setOnMapLongClickListener {
             val snippet = String.format(
                 Locale.getDefault(),
@@ -159,63 +168,106 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             binding.includedItem.tvLattitude.text = it.latitude.toString()
             binding.includedItem.tvLongitude.text = it.longitude.toString()
 
-            binding.includedItem.fabSave.setOnClickListener{
+            binding.includedItem.fabSave.setOnClickListener {
                 Toast.makeText(requireContext(), "FAB SAVE CLICK", Toast.LENGTH_SHORT).show()
             }
 
-            binding.includedItem.imageButtonClose.setOnClickListener{
+            binding.includedItem.imageButtonClose.setOnClickListener {
                 bottomSheetBehaviorItem.state = BottomSheetBehavior.STATE_HIDDEN
             }
         }
 
     }
 
-    private fun hideBottomNavView(){
+    private fun hideBottomNavView() {
         val parentActivity: MainActivity = activity as MainActivity
         val view: BottomNavigationView = parentActivity.nav_view
 
-        if (view.visibility==View.VISIBLE)
+        if (view.visibility == View.VISIBLE)
             view.visibility = View.GONE
     }
 
-    private fun showBottomNavView(){
+    private fun showBottomNavView() {
         val parentActivity: MainActivity = activity as MainActivity
         val view: BottomNavigationView = parentActivity.nav_view
 
-        if (view.visibility==View.GONE)
+        if (view.visibility == View.GONE)
             view.visibility = View.VISIBLE
     }
 
-    private fun hideFAB(){
+    private fun hideFAB() {
         val parentActivity: MainActivity = activity as MainActivity
         val view: View = parentActivity.fab_list
 
-        if (view.visibility==View.VISIBLE)
+        if (view.visibility == View.VISIBLE)
             view.visibility = View.GONE
     }
 
-    private fun showFAB(){
+    private fun showFAB() {
         val parentActivity: MainActivity = activity as MainActivity
         val view: View = parentActivity.fab_list
 
-        if (view.visibility==View.GONE)
+        if (view.visibility == View.GONE)
             view.visibility = View.VISIBLE
     }
 
-
-
-    private fun createBottomSheetItemBehavior(){
-        bottomSheetBehaviorItem = BottomSheetBehavior.from(binding.includedItem.bottomSheetItem)
-        bottomSheetBehaviorItem.isFitToContents = false
-        bottomSheetBehaviorItem.halfExpandedRatio = 0.4f
-        bottomSheetBehaviorItem.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+    private fun createBottomSheetListBehaviour() {
+        bottomSheetBehaviorList = BottomSheetBehavior.from(binding.includedItemList.bottomMapList)
+        // bottomSheetBehaviorList.isFitToContents = false
+        // bottomSheetBehaviorList.halfExpandedRatio = 0.4f
+        bottomSheetBehaviorList.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
             }
 
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 when (newState) {
                     BottomSheetBehavior.STATE_EXPANDED -> {
-                        Toast.makeText(requireContext(), "STATE_EXPANDED", Toast.LENGTH_SHORT).show()
+                        binding.fabList.setImageResource(R.drawable.outline_close_black_24)
+                        // findNavController().navigate(R.id.action_navigation_maps_to_navigation_dashboard)
+                        Toast.makeText(requireContext(), "STATE_EXPANDED", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                    BottomSheetBehavior.STATE_COLLAPSED -> {
+                        binding.fabList.setImageResource(R.drawable.fab_list_black_24)
+                        Toast.makeText(requireContext(), "STATE_COLLAPSED", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                    BottomSheetBehavior.STATE_DRAGGING -> {
+                        Toast.makeText(requireContext(), "STATE_DRAGGING", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                    BottomSheetBehavior.STATE_HALF_EXPANDED -> {
+                        Toast.makeText(requireContext(), "STATE_HALF_EXPANDED", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+/*                    BottomSheetBehavior.STATE_HIDDEN -> {
+                        binding.fabList.setImageResource(R.drawable.fab_list_black_24)
+                        Toast.makeText(requireContext(), "STATE_HIDDEN", Toast.LENGTH_SHORT).show()
+                    }*/
+                    BottomSheetBehavior.STATE_SETTLING -> {
+                        Toast.makeText(requireContext(), "STATE_SETTLING", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+            }
+        })
+    }
+
+    private fun createBottomSheetItemBehavior() {
+        bottomSheetBehaviorItem = BottomSheetBehavior.from(binding.includedItem.bottomSheetItem)
+        bottomSheetBehaviorItem.isFitToContents = false
+        bottomSheetBehaviorItem.halfExpandedRatio = 0.4f
+        bottomSheetBehaviorItem.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+            }
+
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                when (newState) {
+                    BottomSheetBehavior.STATE_EXPANDED -> {
+                        Toast.makeText(requireContext(), "STATE_EXPANDED", Toast.LENGTH_SHORT)
+                            .show()
                     }
 /*                    BottomSheetBehavior.STATE_COLLAPSED -> {
                         Toast.makeText(requireContext(), "STATE_COLLAPSED", Toast.LENGTH_SHORT).show()
@@ -223,10 +275,12 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                         showFAB()
                     }*/
                     BottomSheetBehavior.STATE_DRAGGING -> {
-                        Toast.makeText(requireContext(), "STATE_DRAGGING", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "STATE_DRAGGING", Toast.LENGTH_SHORT)
+                            .show()
                     }
                     BottomSheetBehavior.STATE_HALF_EXPANDED -> {
-                        Toast.makeText(requireContext(), "STATE_HALF_EXPANDED", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "STATE_HALF_EXPANDED", Toast.LENGTH_SHORT)
+                            .show()
                         hideBottomNavView()
                     }
                     BottomSheetBehavior.STATE_HIDDEN -> {
@@ -235,7 +289,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                         showFAB()
                     }
                     BottomSheetBehavior.STATE_SETTLING -> {
-                        Toast.makeText(requireContext(), "STATE_SETTLING", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "STATE_SETTLING", Toast.LENGTH_SHORT)
+                            .show()
                     }
                 }
             }

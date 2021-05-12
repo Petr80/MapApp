@@ -1,15 +1,12 @@
 package com.petr.example.mapapp.ui.map
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.petr.example.mapapp.data.Item
 import com.petr.example.mapapp.databinding.ListItemsBinding
-import com.petr.example.mapapp.ui.maplist.ItemsListFragmentDirections
 
 class MapListAdapter : ListAdapter<Item, RecyclerView.ViewHolder>(ItemDiffCallback()) {
 
@@ -31,11 +28,6 @@ class MapListAdapter : ListAdapter<Item, RecyclerView.ViewHolder>(ItemDiffCallba
                 }
             }
         }
-
-/*        private fun navigateToDetailImage(item: Item, view: View) {
-            val action = ItemsListFragmentDirections.actionNavigationDashboardToNavigationDetail(item.itemId)
-            view.findNavController().navigate(action)
-        }*/
 
         fun bind(items: Item) {
             binding.apply {
