@@ -20,7 +20,12 @@ object DatabaseModule {
     }
 
     @Provides
-    fun providePetDao(appDatabase: AppDatabase): ItemDao {
+    fun provideItemDao(appDatabase: AppDatabase): ItemDao {
         return appDatabase.itemDao()
+    }
+
+    @Provides
+    fun providePhotoDao(appDatabase: AppDatabase): PhotoDao {
+        return appDatabase.photoDao()
     }
 }

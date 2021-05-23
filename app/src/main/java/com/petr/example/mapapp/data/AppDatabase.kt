@@ -11,10 +11,11 @@ import androidx.work.WorkManager
 /**
  * Note that exportSchema should be true in production databases.
  */
-@Database(entities = [Item::class], version = 1, exportSchema = false)
+@Database(entities = [Item::class, Photo::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun itemDao(): ItemDao
+    abstract fun photoDao(): PhotoDao
 
     companion object {
         // For Singleton instantiation

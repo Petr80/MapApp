@@ -11,8 +11,8 @@ interface ItemDao {
     @Query("SELECT * FROM items WHERE id = :itemId")
     fun getItem(itemId: Long): LiveData<Item>
 
-    @Query("SELECT * from items where :left < lat and :left > lat ")
-    fun getItemsFromRegion(left: Long, right: Long, top: Long, bottom: Long) : LiveData<Item>
+/*    @Query("SELECT * from items where :left < lat and :left > lat ")
+    fun getItemsFromRegion(left: Long, right: Long, top: Long, bottom: Long) : LiveData<Item>*/
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertItem(pet: Item): Long

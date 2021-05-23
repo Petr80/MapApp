@@ -36,11 +36,27 @@
             app:destination="@id/navigation_edit" />
     </fragment>
 
+    <!-- PHOTOS -->
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.petr.example.mapapp.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_photos"
+        android:name="com.petr.example.mapapp.ui.photo.PhotoListFragment"
+        android:label="@string/title_photo"
+        tools:layout="@layout/fragment_photo_list" >
+        <action
+            android:id="@+id/action_navigation_photos_to_navigation_photo_detail"
+            app:destination="@id/navigation_photo_detail" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_photo_detail"
+        android:name="com.petr.example.mapapp.ui.photo.PhotoDetailFragment"
+        android:label="PhotoDetailFragment"
+        tools:layout="@layout/fragment_photo_detail">
+        <argument
+            android:name="photoId"
+            app:argType="long"
+            android:defaultValue="-1L" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_detail"

@@ -46,11 +46,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     private var lat: Float = 0f
     private var lon: Float = 0f
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentMapsBinding.inflate(inflater, container, false)
 
         createBottomSheetListBehaviour()
@@ -76,8 +72,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             binding.includedItemList.hasItems = !result.isNullOrEmpty()
             (binding.includedItemList.bottomMapRecycleList.adapter as MapListAdapter).submitList(result)
 
-            // for cycle add markers
-
+            // for cycle add markers hhghghgh
         }
     }
     
@@ -176,7 +171,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                 bottomSheetBehaviorItem.state = BottomSheetBehavior.STATE_HIDDEN
             }
         }
-
     }
 
     private fun hideBottomNavView() {
@@ -225,29 +219,19 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                     BottomSheetBehavior.STATE_EXPANDED -> {
                         binding.fabList.setImageResource(R.drawable.outline_close_black_24)
                         // findNavController().navigate(R.id.action_navigation_maps_to_navigation_dashboard)
-                        Toast.makeText(requireContext(), "STATE_EXPANDED", Toast.LENGTH_SHORT)
-                            .show()
                     }
                     BottomSheetBehavior.STATE_COLLAPSED -> {
                         binding.fabList.setImageResource(R.drawable.fab_list_black_24)
-                        Toast.makeText(requireContext(), "STATE_COLLAPSED", Toast.LENGTH_SHORT)
-                            .show()
                     }
                     BottomSheetBehavior.STATE_DRAGGING -> {
-                        Toast.makeText(requireContext(), "STATE_DRAGGING", Toast.LENGTH_SHORT)
-                            .show()
                     }
                     BottomSheetBehavior.STATE_HALF_EXPANDED -> {
-                        Toast.makeText(requireContext(), "STATE_HALF_EXPANDED", Toast.LENGTH_SHORT)
-                            .show()
                     }
 /*                    BottomSheetBehavior.STATE_HIDDEN -> {
                         binding.fabList.setImageResource(R.drawable.fab_list_black_24)
                         Toast.makeText(requireContext(), "STATE_HIDDEN", Toast.LENGTH_SHORT).show()
                     }*/
                     BottomSheetBehavior.STATE_SETTLING -> {
-                        Toast.makeText(requireContext(), "STATE_SETTLING", Toast.LENGTH_SHORT)
-                            .show()
                     }
                 }
             }
@@ -266,8 +250,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 when (newState) {
                     BottomSheetBehavior.STATE_EXPANDED -> {
-                        Toast.makeText(requireContext(), "STATE_EXPANDED", Toast.LENGTH_SHORT)
-                            .show()
                     }
 /*                    BottomSheetBehavior.STATE_COLLAPSED -> {
                         Toast.makeText(requireContext(), "STATE_COLLAPSED", Toast.LENGTH_SHORT).show()
@@ -275,22 +257,15 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                         showFAB()
                     }*/
                     BottomSheetBehavior.STATE_DRAGGING -> {
-                        Toast.makeText(requireContext(), "STATE_DRAGGING", Toast.LENGTH_SHORT)
-                            .show()
                     }
                     BottomSheetBehavior.STATE_HALF_EXPANDED -> {
-                        Toast.makeText(requireContext(), "STATE_HALF_EXPANDED", Toast.LENGTH_SHORT)
-                            .show()
                         hideBottomNavView()
                     }
                     BottomSheetBehavior.STATE_HIDDEN -> {
-                        Toast.makeText(requireContext(), "STATE_HIDDEN", Toast.LENGTH_SHORT).show()
                         showBottomNavView()
                         showFAB()
                     }
                     BottomSheetBehavior.STATE_SETTLING -> {
-                        Toast.makeText(requireContext(), "STATE_SETTLING", Toast.LENGTH_SHORT)
-                            .show()
                     }
                 }
             }
