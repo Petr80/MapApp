@@ -83,9 +83,14 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <include layout="@layout/fragment_items_list"/>
+        <include android:id="@+id/included_item_list" layout="@layout/fragment_items_list"/>
+
+        <include android:id="@+id/included_item" layout="@layout/fragment_edit"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_list"

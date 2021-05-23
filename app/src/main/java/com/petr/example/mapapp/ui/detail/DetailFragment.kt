@@ -42,6 +42,13 @@ class DetailFragment : Fragment() {
                 findNavController().navigate(action)
 
             }
+
+//            arguments?.let{ args ->
+//                args.getBundle("SOME KEY")?.let{
+//                    selectedItem -> detailViewModel.setItem(selectedItem)
+//                }
+//
+//            }
         }
         setHasOptionsMenu(true)
         return binding.root
