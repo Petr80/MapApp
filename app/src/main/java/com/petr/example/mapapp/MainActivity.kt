@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
 
         val binding: ActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-       val toolbar: Toolbar = binding.toolbar
+        val toolbar: Toolbar = binding.toolbar
         setSupportActionBar(toolbar)
 
         val navView: BottomNavigationView = binding.navView
@@ -45,11 +45,5 @@ class MainActivity : AppCompatActivity() {
                 navView.visibility = View.VISIBLE
             }
         }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.main_menu, menu)
-        return true
     }
 }

@@ -37,19 +37,23 @@ class PhotoListFragment : Fragment() {
     private val CAMERA_REQUEST_CODE = 1
     private val GALLERY_REQUEST_CODE = 2
 
-        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-            binding = FragmentPhotoListBinding.inflate(inflater, container, false)
-            val photoListAdapter = PhotoListAdapter()
-            binding.photoList.adapter = photoListAdapter
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentPhotoListBinding.inflate(inflater, container, false)
+        val photoListAdapter = PhotoListAdapter()
+        binding.photoList.adapter = photoListAdapter
 
-            subscribeUi(photoListAdapter, binding)
+        subscribeUi(photoListAdapter, binding)
 
-            // Botoom Sheet Dialog
-            bottomSheetDialog = BottomSheetDialog(this.requireContext(), R.style.BottomSheetTheme)
-            val view = layoutInflater.inflate(R.layout.bottom_sheet_layout, bottom_sheet)
-            bottomSheetDialog.setContentView(view)
+        // Botoom Sheet Dialog
+        bottomSheetDialog = BottomSheetDialog(this.requireContext(), R.style.BottomSheetTheme)
+        val view = layoutInflater.inflate(R.layout.bottom_sheet_layout, bottom_sheet)
+        bottomSheetDialog.setContentView(view)
 
-            return binding.root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -81,9 +85,9 @@ class PhotoListFragment : Fragment() {
                 // Continue only if the File was successfully created
                 photoFile?.also {
                     val photoURI: Uri = FileProvider.getUriForFile(
-                            requireContext(),
-                            "com.petr.example.mapapp.fileprovider",
-                            it
+                        requireContext(),
+                        "com.petr.example.mapapp.fileprovider",
+                        it
                     )
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
                     startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE)
@@ -95,14 +99,13 @@ class PhotoListFragment : Fragment() {
     @Throws(IOException::class)
     private fun createImageFile(): File {
         // Create an image file name
-        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
         val storageDir: File? = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         return File.createTempFile(
-                "MyPet_${timeStamp}_", /* prefix */
-                ".jpg", /* suffix */
-                storageDir /* directory */
+            "MyPet_${timeStamp}_",
+            ".jpg",
+            storageDir
         ).apply {
-            // Save a file: path for use with ACTION_VIEW intents
             currentPhotoPath = absolutePath
         }
     }
